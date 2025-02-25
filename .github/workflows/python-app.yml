@@ -9,8 +9,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
+env:
+  LINE_ACCESS_TOKEN: ${{secrets.LINE_ACCESS_TOKEN}}
+  LINE_USER_ID: ${{secrets.LINE_USER_ID}}
 
 jobs:
   build:
