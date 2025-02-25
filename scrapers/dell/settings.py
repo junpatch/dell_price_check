@@ -97,3 +97,11 @@ from shutil import which
 SELENIUM_DRIVER_NAME = 'chrome'
 SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver.exe')
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
+
+import os
+
+# ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
+LOG_LEVEL = 'INFO'
+
+# ログファイルのパスを指定
+LOG_FILE = os.path.join(os.getcwd(), 'scrapy.log')
