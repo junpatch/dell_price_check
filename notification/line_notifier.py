@@ -1,72 +1,59 @@
 import requests
-# from settings import LINE_CHANNEL_TOKEN
+import logging
+import os
 
-#
-# class LineNotifier:
-#     def send_notifications(self, price_changes):
-#         headers = {
-#             "Content_Type": "application/json",
-#             "Authorization": "Bearer " + 'YOUR_CHANNEL_ACCESS_TOKEN'
-#         }
-#
-#         message = (
-#             f"🚨価格変動のお知らせ🚨\n"
-#             f"商品名: {change['name']}\n"
-#             f"旧価格: ¥{change['old_price']}\n"
-#             f"新価格: ¥{change['new_price']}\n"
-#             f"商品リンク: {change['url']}"
-#         )
-#         requests.post(
-#             "https://api.line.me/v2/bot/message/push",
-#             headers=headers,
-#             data={"to":user_id,"message": message}
-#         )
-#
-#     def send_notification(self, param):
-#         pass
+from dotenv import load_dotenv
+
+REQUEST_URL = "https://api.line.me/v2/bot/message/broadcast"
+
+# 環境変数を取得
+load_dotenv()
+
+# ロギング設定
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+
 class LineNotifier:
-    def send_notifications(self, old_price, new_price, name, url):
-        YOUR_CHANNEL_ACCESS_TOKEN='eyJhbGciOiJIUzI1NiJ9.GrG84oMSZMOey3DAe-_U-XszQQmMRuv0d_yx8emPvTlrn66R3TweMkbudFnh-1-1lAWv_i2Gv95wfdDqcd9e2l2touJOZvqBCPVI6wNGok9J9HjgNRRIL-qtY3coXu0K.OxFBZ2xvuFnHL0yKQJrK3Iajv7XPoUIQRxDMp1DGJVs'
+    def __init__(self):
+        self.access_token = os.getenv("LINE_ACCESS_TOKEN")
+        self.user_id = os.getenv("LINE_USER_ID")
+        self.request_url = REQUEST_URL
 
+        if not self.access_token or not self.user_id:
+            raise ValueError("LINE_ACCESS_TOKEN または LINE_USER_ID が設定されていません。")
+
+    def send_notifications(self, old_price, new_price, name, url):
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {YOUR_CHANNEL_ACCESS_TOKEN}"
+            "Authorization": f"Bearer {self.access_token}"
         }
 
         message = (
             f"🚨価格変動のお知らせ🚨\n"
             f"商品名: {name}\n"
-            f"旧価格: {old_price}¥\n"
-            f"新価格: {new_price}¥\n"
+            f"旧価格: ¥{old_price}\n"
+            f"新価格: ¥{new_price}\n"
             f"商品リンク: {url}"
         )
 
-        payload = {
-            "to": "Ua34ec613cf697020668168a77bf6efad",  # メッセージを送るユーザーID（またはグループID）
-            "messages": [
-                {
-                    "type": "text",
-                    "text": message
+        try:
+            response=requests.post(
+                self.request_url,
+                headers=headers,
+                json={
+                    # "to": self.user_id,  # メッセージを送るユーザーID（またはグループID）
+                    "messages": [{"type": "text","text": message}]
                 }
-            ]
-        }
+            )
 
-        res=requests.post(
-            "https://api.line.me/v2/bot/message/push",
-            headers=headers,
-            json=payload
-        )
+            if response.status_code == 200:
+                logger.info("通知が正常に送信されました。")
+            else:
+                logger.error(
+                    f"通知の送信中にエラーが発生しました。ステータスコード: {response.status_code}, "
+                    f"レスポンス: {response.text}"
+                )
 
-
-        print(f"ステータスコード: {res.status_code}")
-        print(res.json())
-
-# res = requests.get(
-#     "https://api.line.me/oauth2/v2.1/verify",
-#     headers={"Content-Type": "application/x-www-form-urlencoded"},
-#     params={
-#         "access_token": "eyJhbGciOiJIUzI1NiJ9.GrG84oMSZMOey3DAe-_U-XszQQmMRuv0d_yx8emPvTlrn66R3TweMkbudFnh-1-1lAWv_i2Gv95wfdDqcd9e2l2touJOZvqBCPVI6wNGok9J9HjgNRRIL-qtY3coXu0K.OxFBZ2xvuFnHL0yKQJrK3Iajv7XPoUIQRxDMp1DGJVs"
-#     }
-# )
-# print(f"ステータスコード: {res.status_code}")
-# print(res.json())
+        except requests.RequestException as e:
+            logger.exception(f"LINE通知の送信中に例外が発生しました: {e}")
