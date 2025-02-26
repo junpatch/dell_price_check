@@ -28,6 +28,10 @@ class LaptopSpider(scrapy.Spider):
 
         for laptop_model in self.LAPTOP_LIST:
             try:
+                w = driver.execute_script("return document.body.scrollWidth")
+                h = driver.execute_script("return document.body.scrollHeight")
+                driver.set_window_size(w, h)
+                driver.save_screenshot("debug_screenshot.png")
                 # リンクがクリック可能になるまで待機してクリック
                 WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable(
