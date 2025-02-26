@@ -1,0 +1,6 @@
+/.env
+/establish_token.py
+/get_JWT.py
+/key.py
+__pycache__/
+*.pyc
