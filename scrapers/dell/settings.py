@@ -103,5 +103,5 @@ import os
 # ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
 LOG_LEVEL = 'INFO'
 
-# ログファイルのパスを指定
+# ログファイルのパス指定
 LOG_FILE = os.path.join(os.getcwd(), 'scrapy.log')
