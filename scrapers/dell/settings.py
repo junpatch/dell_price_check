@@ -93,8 +93,6 @@ ITEM_PIPELINES = {
 FEED_EXPORT_ENCODING = "utf-8"
 
 from shutil import which
-
-import chromedriver_binary
 import os
 
 SELENIUM_DRIVER_NAME = 'chrome'
