@@ -104,11 +104,8 @@ else:
     SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_binary.chromedriver_filename
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
 
-print(f'SELENIUM_DRIVER_EXECUTABLE_PATH: {SELENIUM_DRIVER_EXECUTABLE_PATH}')
-
 # ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'
 
 # ログファイルのパス指定
-
 LOG_FILE = os.path.join(os.getcwd(), 'scrapy.log')

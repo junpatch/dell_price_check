@@ -45,8 +45,8 @@ class SQLAlchemyPipeline:
                                             )
         except Exception as e:
             self.session.rollback()
-            spider.logger.error(f"Error processing item: {e}")
-            raise DropItem(f"Failed to process item: {e}")
+            spider.logger.error(f"pipelines: Error processing item: {e}")
+            raise DropItem(f"pipelines: Failed to process item: {e}")
 
         return item
 
@@ -78,9 +78,9 @@ class SQLAlchemyPipeline:
     def _get_price_last_scraped(self, item: dict) -> int:
         """Get the last scraped price from the given item."""
         existing_product = self.session.query(models.Product).filter_by(
-            order_code=item.get('order_code')).first().price
+            order_code=item.get('order_code')).first()
 
         if existing_product:
-            return existing_product
+            return existing_product.price
         else:
             return 0
