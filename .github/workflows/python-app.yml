@@ -42,8 +42,7 @@ jobs:
       run: |
         git config user.name "junpatch"
         git config user.email "junya.ishimoto@gmail.com"
-        #git remote set-url origin https://junpatch:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/junpatch/dell_price_check.git
-        git remote set-url origin https://junpatch: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@github.com/junpatch/dell_price_check.git
+        git remote set-url origin https://junpatch:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/junpatch/dell_price_check.git
         git add .
         git commit -m "Shceduled Run"
         git pull
