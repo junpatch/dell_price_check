@@ -101,7 +101,8 @@ SELENIUM_DRIVER_NAME = 'chrome'
 if os.name == 'nt':
     SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
 else:
-    SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_binary.chromedriver_filename
+    import chromedriver_autoinstaller
+    SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_autoinstaller.install()
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
 
 # ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
