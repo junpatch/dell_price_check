@@ -63,3 +63,55 @@
  'scheduler/enqueued/memory': 1,
  'start_time': datetime.datetime(2025, 2, 26, 10, 5, 46, 487017)}
 2025-02-26 10:05:47 [scrapy.core.engine] INFO: Spider closed (finished)
+2025-02-26 13:21:23 [scrapy.utils.log] INFO: Scrapy 2.4.1 started (bot: dell)
+2025-02-26 13:21:23 [scrapy.utils.log] INFO: Versions: lxml 5.3.1.0, libxml2 2.12.9, cssselect 1.2.0, parsel 1.7.0, w3lib 2.2.1, Twisted 22.10.0, Python 3.8.18 (default, Dec 12 2024, 19:15:30) - [GCC 13.2.0], pyOpenSSL 22.0.0 (OpenSSL 3.0.5 5 Jul 2022), cryptography 38.0.1, Platform Linux-6.8.0-1021-azure-x86_64-with-glibc2.34
+2025-02-26 13:21:23 [scrapy.crawler] INFO: Overridden settings:
+{'BOT_NAME': 'dell',
+ 'DOWNLOAD_DELAY': 3,
+ 'FEED_EXPORT_ENCODING': 'utf-8',
+ 'LOG_FILE': '/home/runner/work/dell_price_check/dell_price_check/scrapers/scrapy.log',
+ 'LOG_LEVEL': 'INFO',
+ 'NEWSPIDER_MODULE': 'dell.spiders',
+ 'SPIDER_MODULES': ['dell.spiders']}
+2025-02-26 13:21:23 [scrapy.extensions.telnet] INFO: Telnet Password: 8679fc47e17edd8e
+2025-02-26 13:21:23 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.memusage.MemoryUsage',
+ 'scrapy.extensions.logstats.LogStats']
+2025-02-26 13:21:25 [twisted] CRITICAL: Unhandled error in Deferred:
+2025-02-26 13:21:25 [twisted] CRITICAL: 
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/twisted/internet/defer.py", line 1697, in _inlineCallbacks
+    result = context.run(gen.send, result)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/crawler.py", line 87, in crawl
+    self.engine = self._create_engine()
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/crawler.py", line 101, in _create_engine
+    return ExecutionEngine(self, lambda _: self.stop())
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/core/engine.py", line 69, in __init__
+    self.downloader = downloader_cls(crawler)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/core/downloader/__init__.py", line 83, in __init__
+    self.middleware = DownloaderMiddlewareManager.from_crawler(crawler)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/middleware.py", line 53, in from_crawler
+    return cls.from_settings(crawler.settings, crawler)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/middleware.py", line 35, in from_settings
+    mw = create_instance(mwcls, settings, crawler)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy/utils/misc.py", line 167, in create_instance
+    instance = objcls.from_crawler(crawler, *args, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy_selenium/middlewares.py", line 67, in from_crawler
+    middleware = cls(
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/scrapy_selenium/middlewares.py", line 51, in __init__
+    self.driver = driver_klass(**driver_kwargs)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/selenium/webdriver/chrome/webdriver.py", line 76, in __init__
+    RemoteWebDriver.__init__(
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 157, in __init__
+    self.start_session(capabilities, browser_profile)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 252, in start_session
+    response = self.execute(Command.NEW_SESSION, parameters)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version 135
+Current browser version is 133.0.6943.126 with binary path /opt/google/chrome/chrome
+
