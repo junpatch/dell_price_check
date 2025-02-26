@@ -94,14 +94,17 @@ FEED_EXPORT_ENCODING = "utf-8"
 
 from shutil import which
 
+import chromedriver_binary
 import os
 
 SELENIUM_DRIVER_NAME = 'chrome'
 if os.name == 'nt':
     SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
 else:
-    SELENIUM_DRIVER_EXECUTABLE_PATH = '/usr/local/bin/chromedriver'
+    SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_binary.chromedriver_filename
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
+
+print(f'SELENIUM_DRIVER_EXECUTABLE_PATH: {SELENIUM_DRIVER_EXECUTABLE_PATH}')
 
 # ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
 LOG_LEVEL = 'INFO'
