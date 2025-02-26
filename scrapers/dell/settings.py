@@ -104,4 +104,5 @@ import os
 LOG_LEVEL = 'INFO'
 
 # ログファイルのパス指定
+
 LOG_FILE = os.path.join(os.getcwd(), 'scrapy.log')
