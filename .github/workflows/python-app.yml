@@ -32,7 +32,7 @@ jobs:
         
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        pip install chromedriver-binary
+        pip install chromedriver-binary==133.0.6943.126.0
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     #- name: Lint with flake8
     # run: |
