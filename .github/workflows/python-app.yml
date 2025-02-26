@@ -29,11 +29,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y unzip wget
         sudo apt-get install -y google-chrome-stable
-        wget https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chrome-headless-shell-linux64.zip
-        unzip chrome-headless-shell-linux64.zip -d /usr/local/bin/
-
+        
         python -m pip install --upgrade pip
         pip install flake8 pytest
+        pip install chromedriver-binary
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     #- name: Lint with flake8
     # run: |
