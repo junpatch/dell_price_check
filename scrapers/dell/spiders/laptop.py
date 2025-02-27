@@ -28,7 +28,6 @@ class LaptopSpider(scrapy.Spider):
 
         for laptop_model in self.LAPTOP_LIST:
             try:
-                # リンクがクリック可能になるまで待機してクリック
                 clickable_link = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable(
                         (By.XPATH, f"//h3[@class='ps-title']/a[contains(@href,'{laptop_model}')]"))
