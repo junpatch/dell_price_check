@@ -5,13 +5,14 @@ name: Python application
 
 on:
   schedule:
-   # - cron: '0 13 * * *'
     - cron: '0 0 * * *'
   workflow_dispatch: 
 
 env:
   LINE_ACCESS_TOKEN: ${{secrets.LINE_ACCESS_TOKEN}}
-  LINE_USER_ID: ${{secrets.LINE_USER_ID}}
+  GIT_USER_NAME: ${{secrets.GIT_USER_NAME}}
+  GIT_USER_EMAIL: ${{secrets.GIT_USER_EMAIL}}
+  GH_PERSONAL_ACCESS_TOKEN: ${{secrets.GH_PERSONAL_ACCESS_TOKEN}}
 
 jobs:
   build:
@@ -20,6 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
@@ -43,15 +45,14 @@ jobs:
         python main.py
     - name: Commit changes
       run: |
-        git config user.name "junpatch"
-        git config user.email "junya.ishimoto@gmail.com"
-        git remote set-url origin https://junpatch:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/junpatch/dell_price_check.git
+        git config user.name "${GIT_USER_NAME}"
+        git config user.email "${GIT_USER_EMAIL}"
+        git remote set-url origin https://${GIT_USER_NAME}:${GH_PERSONAL_ACCESS_TOKEN}@github.com/junpatch/dell_price_check.git
         git remote -v
         git add .
-        git commit -m "Shceduled Run"
+        git commit -m "Scheduled Run"
     - name: Push changes
       run: |
         git push origin main
-        
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
