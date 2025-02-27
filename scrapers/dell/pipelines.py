@@ -1,61 +1,61 @@
-from itemadapter import ItemAdapter
 from datetime import datetime
-from sqlalchemy import create_engine, Column, String, Integer, ForeignKey, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-from notification import line_notifier
 from model import models
+from notification.line_notifier import LineNotifier
 
-
-# Constants
+# 定数
 DATABASE_URL = 'sqlite:///dell_laptop.db'
+DEFAULT_PRICE = 0  # 既存価格がない場合のデフォルト値
 
-# SQLAlchemy-based Pipeline
+
 class SQLAlchemyPipeline:
     def open_spider(self, spider) -> None:
-        """Initialize and open database connection, and create tables."""
+        """データベース接続を初期化し、テーブルを作成する。"""
         self.engine = create_engine(DATABASE_URL)
         models.Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
 
     def process_item(self, item: dict, spider) -> dict:
-        """Process and store an item in the database."""
+        """アイテムを処理してデータベースに保存する。"""
         try:
-            old_price = self._get_price_last_scraped(item=item)
+            current_time = datetime.now()
+            old_price = self._get_price_last_scraped(item)
             new_price = item.get('price')
 
-            product = self._create_product(item)
-            self.session.merge(product)
+            # データベースに商品と価格履歴を保存
+            self._save_product_and_history(item, current_time)
 
-            price_history = self._create_price_history(item)
-            self.session.add(price_history)
-
-            self.session.commit()
-
+            # 価格が変更された場合、通知を送信
             if new_price != old_price:
-                # 実行後に通知を送信
-                notifier = line_notifier.LineNotifier()
-                notifier.send_notifications(name=item.get('name'),
-                                            old_price=old_price,
-                                            new_price=new_price,
-                                            url=item.get('url')
-                                            )
+                self._send_notification(item, old_price, new_price)
+
         except Exception as e:
             self.session.rollback()
-            spider.logger.error(f"pipelines: Error processing item: {e}")
-            raise DropItem(f"pipelines: Failed to process item: {e}")
-
+            spider.logger.error(f"エラー発生 (Order Code: {item.get('order_code')}): {e}")
+            raise DropItem(f"アイテム処理失敗: {e}")
         return item
 
     def close_spider(self, spider) -> None:
-        """Close database session and connection."""
+        """データベースセッションと接続を終了する。"""
         self.session.close()
 
-    def _create_product(self, item: dict) -> models.Product:
-        """Create a Products object from the given item."""
+    def _save_product_and_history(self, item: dict, current_time: datetime) -> None:
+        """
+        データベースに商品データと価格履歴を保存する。
+        """
+        product = self._create_product(item, current_time)
+        self.session.merge(product)
+
+        price_history = self._create_price_history(item, current_time)
+        self.session.add(price_history)
+        self.session.commit()
+
+    def _create_product(self, item: dict, current_time: datetime) -> models.Product:
+        """アイテムから Product オブジェクトを作成する。"""
         return models.Product(
             order_code=item.get('order_code'),
             name=item.get('name'),
@@ -63,24 +63,31 @@ class SQLAlchemyPipeline:
             url=item.get('url'),
             price=item.get('price'),
             discount=item.get('discount'),
-            scraped_at=datetime.now()
+            scraped_at=current_time
         )
 
-    def _create_price_history(self, item: dict) -> models.PriceHistory:
-        """Create a PriceHistory object from the given item."""
+    def _create_price_history(self, item: dict, current_time: datetime) -> models.PriceHistory:
+        """アイテムから PriceHistory オブジェクトを作成する。"""
         return models.PriceHistory(
             order_code=item.get('order_code'),
             price=item.get('price'),
             discount=item.get('discount'),
-            scraped_at=datetime.now()
+            scraped_at=current_time
         )
 
     def _get_price_last_scraped(self, item: dict) -> int:
-        """Get the last scraped price from the given item."""
+        """指定されたアイテムの以前の価格を取得する。"""
         existing_product = self.session.query(models.Product).filter_by(
-            order_code=item.get('order_code')).first()
+            order_code=item.get('order_code')
+        ).first()
+        return existing_product.price if existing_product else DEFAULT_PRICE
 
-        if existing_product:
-            return existing_product.price
-        else:
-            return 0
+    def _send_notification(self, item: dict, old_price: int, new_price: int) -> None:
+        """価格変更に関する通知を送信する。"""
+        line_notifier_instance = LineNotifier()
+        line_notifier_instance.send_notifications(
+            name=item.get('name'),
+            old_price=old_price,
+            new_price=new_price,
+            url=item.get('url')
+        )

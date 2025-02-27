@@ -1,10 +1,10 @@
 
 
-from scrapers.run_spider import run_spider
+from scrapers.run_spider import execute_spider
 
 
 def main():
-    run_spider()
+    execute_spider()
 
 if __name__ == "__main__":
     main()
