@@ -30,6 +30,20 @@ class LaptopSpider(scrapy.Spider):
             from selenium.common.exceptions import NoSuchElementException
 
             try:
+                import requests
+                from bs4 import BeautifulSoup
+
+                modal_url = driver.current_url
+                self.logger.info(f"Modal URL: {modal_url}")
+                # HTMLを取得
+                response = requests.get(modal_url)
+
+                # BeautifulSoupで解析
+                soup = BeautifulSoup(response.content, "html.parser")
+
+                # HTML全体を出力
+                print(soup.prettify())
+
                 # モーダルの閉じるボタンを探してクリック
                 close_button = driver.find_element(By.CSS_SELECTOR, ".ooc-modal-wrapper .close-button")
                 close_button.click()
