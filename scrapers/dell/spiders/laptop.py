@@ -27,6 +27,16 @@ class LaptopSpider(scrapy.Spider):
         driver = response.meta['driver']
 
         for laptop_model in self.LAPTOP_LIST:
+            from selenium.common.exceptions import NoSuchElementException
+
+            try:
+                # モーダルの閉じるボタンを探してクリック
+                close_button = driver.find_element(By.CSS_SELECTOR, ".ooc-modal-wrapper .close-button")
+                close_button.click()
+            except NoSuchElementException as e:
+                # ポップアップが表示されていない場合はスキップ
+                self.logger.info(f"No pop-up found, continuing...: {e}")
+
             try:
                 w = driver.execute_script("return document.body.scrollWidth")
                 h = driver.execute_script("return document.body.scrollHeight")
