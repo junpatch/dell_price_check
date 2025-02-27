@@ -27,50 +27,20 @@ class LaptopSpider(scrapy.Spider):
         driver = response.meta['driver']
 
         for laptop_model in self.LAPTOP_LIST:
-            from selenium.common.exceptions import NoSuchElementException
-
             try:
-                # import requests
-                # from bs4 import BeautifulSoup
-                #
-                # modal_url = driver.current_url
-                # self.logger.info(f"Modal URL: {modal_url}")
-                # # HTMLを取得
-                # response = requests.get(modal_url)
-                #
-                # # BeautifulSoupで解析
-                # soup = BeautifulSoup(response.content, "html.parser")
-                #
-                # # HTML全体を出力
-                # print(soup.prettify())
-
-                # モーダルの閉じるボタンを探してクリック
-                # close_button = driver.find_element(By.CSS_SELECTOR, ".ooc-modal-wrapper .close-button")
-                close_button = driver.find_element(By.XPATH, "//button[contains(@class,'close')]")
-                # close_button.click()
-            except NoSuchElementException as e:
-                # ポップアップが表示されていない場合はスキップ
-                self.logger.info(f"No pop-up found, continuing...: {e}")
-
-            try:
-                w = driver.execute_script("return document.body.scrollWidth")
-                h = driver.execute_script("return document.body.scrollHeight")
-                driver.set_window_size(w, h)
-                driver.save_screenshot("debug_screenshot.png")
-
                 # リンクがクリック可能になるまで待機してクリック
-                link_element = WebDriverWait(driver, 10).until(
+                clickable_link = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable(
                         (By.XPATH, f"//h3[@class='ps-title']/a[contains(@href,'{laptop_model}')]"))
                 )
-                link_url = link_element.get_attribute("href")
+                link_url = clickable_link.get_attribute("href")
                 driver.get(link_url)
 
                 # ターゲットデータが表示されるまで待機
                 WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//span[@data-bind='html: salePrice']/span[2]"))
                 )
-                sleep(3)
+                sleep(1)
 
                 html = driver.page_source
                 sel = Selector(text=html)
@@ -81,8 +51,6 @@ class LaptopSpider(scrapy.Spider):
                 loader.add_xpath('model', "//div[@class='model-id text-gray-700']/text()")
                 loader.add_xpath('price', "//span[@data-bind='html: salePrice']/span[2]/text()")
                 loader.add_xpath('discount', "//span[@class='h6 align-middle font-weight-bold savings-price']/text()")
-
-                # URLを追加
                 loader.add_value('url', unquote(driver.current_url))
 
                 yield loader.load_item()
