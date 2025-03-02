@@ -1,10 +1,6 @@
+from app import create_app
 
-
-from scrapers.run_spider import execute_spider
-
-
-def main():
-    execute_spider()
+app = create_app(config_name="development")
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)

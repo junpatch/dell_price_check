@@ -1,4 +1,7 @@
+import os
 from datetime import datetime
+
+import pytz
 from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -7,7 +10,8 @@ from model import models
 from notification.line_notifier import LineNotifier
 
 # 定数
-DATABASE_URL = 'sqlite:///dell_laptop.db'
+# DATABASE_URL = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}"
+DATABASE_URL = f"sqlite:///{os.path.join(os.path.dirname(os.getcwd()), 'instance', 'dell_laptop.db')}"
 DEFAULT_PRICE = 0  # 既存価格がない場合のデフォルト値
 
 
@@ -22,15 +26,15 @@ class SQLAlchemyPipeline:
     def process_item(self, item: dict, spider) -> dict:
         """アイテムを処理してデータベースに保存する。"""
         try:
-            current_time = datetime.now()
+            current_time = datetime.now(pytz.timezone('Asia/Tokyo'))
             old_price = self._get_price_last_scraped(item)
             new_price = item.get('price')
 
             # データベースに商品と価格履歴を保存
             self._save_product_and_history(item, current_time)
 
-            # 価格が変更された場合、通知を送信
-            if new_price != old_price:
+            # 価格が変更された場合、かつ通知設定ONの場合、LINE通知を送信
+            if new_price != old_price and self._get_line_notification_status(item):
                 self._send_notification(item, old_price, new_price)
 
         except Exception as e:
@@ -54,9 +58,9 @@ class SQLAlchemyPipeline:
         self.session.add(price_history)
         self.session.commit()
 
-    def _create_product(self, item: dict, current_time: datetime) -> models.Product:
+    def _create_product(self, item: dict, current_time: datetime) -> models.Products:
         """アイテムから Product オブジェクトを作成する。"""
-        return models.Product(
+        return models.Products(
             order_code=item.get('order_code'),
             name=item.get('name'),
             model=item.get('model'),
@@ -77,7 +81,7 @@ class SQLAlchemyPipeline:
 
     def _get_price_last_scraped(self, item: dict) -> int:
         """指定されたアイテムの以前の価格を取得する。"""
-        existing_product = self.session.query(models.Product).filter_by(
+        existing_product = self.session.query(models.Products).filter_by(
             order_code=item.get('order_code')
         ).first()
         return existing_product.price if existing_product else DEFAULT_PRICE
@@ -91,3 +95,9 @@ class SQLAlchemyPipeline:
             new_price=new_price,
             url=item.get('url')
         )
+
+    def _get_line_notification_status(self, item: dict) -> bool:
+        product = self.session.query(models.Products).filter_by(
+            order_code=item.get('order_code')
+        ).first()
+        return product.is_line_notification if product else False

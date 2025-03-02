@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+価格チェックアプリ
+{% endblock %}
+
+{% block content %}
+<header class="bg-primary text-white text-center py-5">
+    <h1>価格チェックサービスへようこそ！</h1>
+    <p class="lead">ウェブ上の商品価格を簡単にチェックし、通知します。</p>
+</header>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>概要</h2>
+            <p>このアプリでは、指定した商品の価格を定期的に確認し、価格が変動した場合に通知を送信します。</p>
+        </div>
+        <div class="col-md-6">
+            <h2>機能</h2>
+            <ul>
+                <li>ウェブ上の複数商品の価格を一括チェック</li>
+                <li>変動時のLINE通知の送信</li>
+                <li>直感的で使いやすいインターフェイス</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

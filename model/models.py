@@ -9,7 +9,7 @@ PRICE_HISTORY_TABLE = 'PriceHistory'
 
 
 # SQLAlchemy Models
-class Product(Base):
+class Products(Base):
     __tablename__ = PRODUCTS_TABLE
     order_code = Column(String, primary_key=True, nullable=False)
     name = Column(String)
@@ -18,6 +18,7 @@ class Product(Base):
     price = Column(Integer)
     discount = Column(Integer)
     scraped_at = Column(DateTime)
+    is_line_notification = Column(Integer)
 
 
 class PriceHistory(Base):
