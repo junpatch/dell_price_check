@@ -66,8 +66,8 @@ class SQLAlchemyPipeline:
             model=item.get('model'),
             url=item.get('url'),
             price=item.get('price'),
-            discount=item.get('discount'),
-            scraped_at=current_time
+            scraped_at=current_time,
+            is_line_notification=False
         )
 
     def _create_price_history(self, item: dict, current_time: datetime) -> models.PriceHistory:
@@ -75,7 +75,6 @@ class SQLAlchemyPipeline:
         return models.PriceHistory(
             order_code=item.get('order_code'),
             price=item.get('price'),
-            discount=item.get('discount'),
             scraped_at=current_time
         )
 

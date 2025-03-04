@@ -32,8 +32,6 @@
       {% endfor %}
     </select>
 
-    <div id="trendListDiv"></div>
-
     <label for="model">Model:</label>
     <select id="model" name="model" required>
       {% for product in filtered_products %}
@@ -42,6 +40,9 @@
       </option>
       {% endfor %}
     </select>
+
+    <div id="trendListDiv"></div>
+
     <button type="submit">更新</button>
   </form>
 

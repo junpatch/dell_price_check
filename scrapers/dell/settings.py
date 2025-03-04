@@ -20,7 +20,7 @@ NEWSPIDER_MODULE = "dell.spiders"
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -100,7 +100,7 @@ SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_autoinstaller.install()
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
 
 # ログレベルを設定（DEBUG, INFO, WARNING, ERROR, CRITICAL）
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'
 
 # ログファイルのパス指定
 LOG_FILE = os.path.join(os.getcwd(), 'scrapy.log')
