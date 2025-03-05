@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const FETCH_ERROR_MSG = "データ取得に失敗しました: ";
     const SERVER_ERROR_MSG = "サーバーエラーが発生しました: ";
     const NETWORK_ERROR_MSG = "ネットワークエラー: ";
+    const MAX_CHECKED_LIMIT = 5;
 
     // ① ロード時の通知設定取得と反映
     const fetchAndSetToggleValue = async (checkbox) => {
@@ -51,12 +52,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    //現在チェックされているチェックボックスるの数をカウント
+    const countChecked = () => {
+        return [...document.querySelectorAll('.toggleButton__checkbox')]
+        .filter(checkbox => checkbox.checked).length;
+    };
+
+    //チェックボックス変更時の確認ロジック
+    const handleCheckboxChange = (checkbox) => {
+        const checkedCount = countChecked();
+
+        if (checkedCount > MAX_CHECKED_LIMIT){
+            alert(`LINE通知は最大${MAX_CHECKED_LIMIT}個までです。`);
+            checkbox.checked = false;
+            return;
+        }
+
+        //制約がない場合
+        sendToggleUpdate(checkbox);
+    };
+
     // 全てのチェックボックスに対する操作設定
     document.querySelectorAll('.toggleButton__checkbox').forEach(async (checkbox) => {
         // 初期化で通知設定を取得して反映
         await fetchAndSetToggleValue(checkbox);
 
         // 変更時に通知設定を送信
-        checkbox.addEventListener('change', () => sendToggleUpdate(checkbox));
+        checkbox.addEventListener('change', () => handleCheckboxChange(checkbox));
     });
 });

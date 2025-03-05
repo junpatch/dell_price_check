@@ -1,52 +1,62 @@
 {% extends "base.html" %}
 
 {% block title %}
-価格チェック
+DELL ノートパソコン価格チェック
 {% endblock %}
 
 {% block content %}
-<h1>価格チェック</h1>
+<h1>DELL ノートパソコン価格チェック</h1>
 
 <!-- LINE通知設定ページへのリンクを追加 -->
 <div style="margin: 15px 0;">
   <a href="{{ url_for('api.line_notification_setting') }}" class="btn btn-primary">LINE通知設定</a>
 </div>
 
-<!-- 価格データ取得ボタン。いずれ消す -->
-<div style="margin: 15px 0;">
-    <button id="getLatest" class="btn btn-primary">価格データ取得</button>
-</div>
- <div id="priceOutput"></div>
-
-
 <!-- 過去の価格推移を表示するセクション -->
 <div class="container">
   <h2>グラフ</h2>
-  <form id="dataForm">
-    <label for="name">Name:</label>
-    <select id="name" name="name">
-      {% for product in products %}
-      <option value="{{product.name}}">
-        {{product.name}}
-      </option>
-      {% endfor %}
-    </select>
 
-    <label for="model">Model:</label>
-    <select id="model" name="model" required>
-      {% for product in filtered_products %}
-      <option value="{{product.model}}">
-        {{product.model}}
-      </option>
-      {% endfor %}
-    </select>
-
-    <div id="trendListDiv"></div>
+  <form id="productSelectionForm">
+    <div>
+      <label for="productNameSelect">Name:</label>
+      <select id="productNameSelect" name="name">
+        <option value="">--商品名を選択--</option>
+        {% for name in product_names_list %}
+        <option value="{{name}}">
+          {{name}}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="productModelSelect">Model:</label>
+      <select id="productModelSelect" disabled>
+        <option value="">--model名を選択--</option>
+      </select>
+    </div>
+    <div id="trendOutputDiv"></div>
 
     <button type="submit">更新</button>
   </form>
 
   <canvas id="priceTrendChart" width="400" height="200"></canvas>
+</div>
+
+<!-- テスト用表示エリア -->
+<div style="margin: 15px 0; padding: 10px; background-color: #f9f9f9; border: 1px dashed #ccc;">
+  <p style="font-weight: bold; color: #555;">※ テスト用エリア</p>
+
+  <!-- 価格データ取得ボタン。いずれ消す -->
+  <div style="margin: 15px 0;">
+      <button id="getLatest" class="btn btn-primary">価格データ取得</button>
+  </div>
+  <div id="priceOutput"></div>
+
+  <!-- テスト通知ボタン。いずれ消す -->
+  <div style="margin: 15px 0;">
+      <button id="notificationTest" class="btn btn-primary">通知テスト</button>
+  </div>
+  <div id="notificationOutput"></div>
 </div>
 
 <!-- Chart.js -->

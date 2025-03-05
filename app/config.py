@@ -6,6 +6,7 @@ class Config:
     DEBUG = False  # デフォルトではデバッグモード無効
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # SQLAlchemyのトラッキングを無効化 (警告を回避)
+    SCHEDULER_API_ENABLED = True  # 必要に応じてAPI有効
     API_RATE_LIMIT = os.environ.get('API_RATE_LIMIT', '100/hour')  # APIリクエスト制限 (例)
 
 class DevelopmentConfig(Config):

@@ -36,26 +36,34 @@ def fetch_order_code(name: str, model: str) -> str | None:
     return product[0] if product else None
 
 
+def fetch_model_by_name(name: str,) -> str | None:
+    """商品の name と model を用いて model を取得"""
+    models = db.session.query(Products.model).filter_by(name=name).all()
+    return models if models else None
+
+
 # ルート定義
 @bp.route("/")
 def index():
     """ホーム画面表示"""
     products = Products.query.all()
-    return render_template("api.html", products=products, filtered_products=products)
+    # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
+    #       スペースを詰めて重複削除が必要。その後、モデル名を選択するときにさらなる工夫が必要・・・
+    product_names_list = sorted(set([product.name for product in products]))
+    return render_template("api.html", product_names_list=product_names_list)
 
 
 @bp.route("/line_notification_setting")
 def line_notification_setting():
     """Line通知設定画面表示"""
-    products = Products.query.all()
-    return render_template("line_notification_setting.html", products=products)
+    sorted_products = Products.query.order_by(Products.name.asc()).all()
+
+    return render_template("api_line_notification_setting.html", products=sorted_products)
 
 
-@bp.route("/check_price", methods=["GET"])
-def price_check() -> Response:
-    """現在の価格を取得"""
-    result = check_price()
-    return jsonify(result)
+@bp.route("/register_line_notification")
+def register_line_notification():
+    return render_template("api_register_line_notification.html")
 
 
 @bp.route("/get_price_trend", methods=["GET", "POST"])
@@ -98,3 +106,29 @@ def update_notification_setting() -> Response:
         db.session.commit()
         return jsonify({"message": NOTIFICATION_UPDATED_MSG.format(order_code)}), 200
     return jsonify({"error": PRODUCT_NOT_FOUND_MSG.format(order_code)}), 404
+
+@bp.route('/get_model/<string:name>', methods=['GET'])
+def get_subcategories(name) -> Response:
+    models = fetch_model_by_name(name)
+    return jsonify([{"model": row[0]} for row in models])
+
+
+@bp.route("/check_price", methods=["GET"])
+def price_check() -> Response:
+    """現在の価格を取得"""
+    result = check_price()
+    return jsonify(result)
+
+
+@bp.route("/notification_test", methods=["GET"])
+def notification_test() -> Response:
+    # すべての価格を0円に変更
+    products = Products.query.all()
+    for product in products:
+        product.price = 0
+
+    db.session.commit()  # データベースに変更を反映
+
+    # 現在の価格を取得してLINE通知
+    result = check_price()
+    return jsonify(result)

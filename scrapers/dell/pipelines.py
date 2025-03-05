@@ -67,7 +67,8 @@ class SQLAlchemyPipeline:
             url=item.get('url'),
             price=item.get('price'),
             scraped_at=current_time,
-            is_line_notification=False
+            # TODO: 既存の設定を上書きしてFalseにしてしまう。一旦定義なしにするが、既存の設定を保持する仕組みにしたい
+            # is_line_notification=False
         )
 
     def _create_price_history(self, item: dict, current_time: datetime) -> models.PriceHistory:
@@ -90,6 +91,7 @@ class SQLAlchemyPipeline:
         line_notifier_instance = LineNotifier()
         line_notifier_instance.send_notifications(
             name=item.get('name'),
+            model=item.get('model'),
             old_price=old_price,
             new_price=new_price,
             url=item.get('url')

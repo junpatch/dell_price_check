@@ -1,5 +1,8 @@
+import logging
 import os
 import subprocess
+
+from main import app
 
 DEFAULT_SPIDER = 'laptop'  # デフォルトのスパイダー名を定義
 ENCODING = 'utf-8'  # エンコーディング
@@ -34,11 +37,14 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
 
     try:
         # コマンドを実行
+        app.logger.info(f"Spider executed: {command}")
+
         process = subprocess.run(
             command, cwd=project_dir, capture_output=True, text=True, encoding=ENCODING
         )
         # 結果処理
+        app.logger.info(f"Spider result: {process.returncode}")
         return handle_process_output(process)
     except Exception as e:
-        print(f"エラー発生: {e}")
+        print(f"Spider実行エラー発生: {e}")
         raise
