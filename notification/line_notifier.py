@@ -23,18 +23,17 @@ class LineNotifier:
         if not self.access_token or not self.user_id:
             raise ValueError("LINE_ACCESS_TOKEN または LINE_USER_ID が設定されていません。")
 
-    def send_notifications(self, old_price, new_price, name, url):
+    def send_notifications(self, old_price, new_price, name, model, url):
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.access_token}"
         }
 
         message = (
-            f"🚨価格変動のお知らせ🚨\n"
-            f"商品名: {name}\n"
-            f"旧価格: ¥{old_price}\n"
-            f"新価格: ¥{new_price}\n"
-            f"商品リンク: {url}"
+            f"🍼ばぶー！おしらせでちゅ🍼\n"
+            f"{name}-{model} が\n"
+            f"¥{old_price}から¥{new_price} にかわったでちゅよ！\n"
+            f"みてみてくだちゃい✨: {url}"
         )
 
         try:
