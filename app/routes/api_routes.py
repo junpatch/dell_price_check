@@ -50,7 +50,7 @@ def index():
     """ホーム画面表示"""
     try:
         products = Products.query.all()
-    except ProgrammingError as e:
+    except Exception as e:
         from main import app
         app.logger.info(f"DBからのデータ取得エラー: {e}")
         products = None
