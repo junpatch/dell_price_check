@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 
 from flask import Blueprint, jsonify, request, render_template, Response
-from app.model.models import Products, PriceHistory, db
 
+from app.model.models import Products, PriceHistory, db
 from app.services.price_checker import check_price
 
 bp = Blueprint("api", __name__, url_prefix="/api")
@@ -36,7 +36,7 @@ def fetch_order_code(name: str, model: str) -> str | None:
     return product[0] if product else None
 
 
-def fetch_model_by_name(name: str,) -> str | None:
+def fetch_model_by_name(name: str, ) -> str | None:
     """商品の name と model を用いて model を取得"""
     models = db.session.query(Products.model).filter_by(name=name).all()
     return models if models else None
@@ -108,6 +108,7 @@ def update_notification_setting() -> Response:
         db.session.commit()
         return jsonify({"message": NOTIFICATION_UPDATED_MSG.format(order_code)}), 200
     return jsonify({"error": PRODUCT_NOT_FOUND_MSG.format(order_code)}), 404
+
 
 @bp.route('/get_model/<string:name>', methods=['GET'])
 def get_subcategories(name) -> Response:
