@@ -6,7 +6,6 @@ from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from main import app
 from scrapers.model import models
 from notification.line_notifier import LineNotifier
 
@@ -20,7 +19,7 @@ DEFAULT_PRICE = 0  # 既存価格がない場合のデフォルト値
 class SQLAlchemyPipeline:
     def open_spider(self, spider) -> None:
         """データベース接続を初期化し、テーブルを作成する。"""
-        self.engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
+        self.engine = create_engine(os.environ.get('PRODUCT_DATABASE_URL'))
         models.Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
