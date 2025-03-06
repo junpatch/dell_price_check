@@ -35,12 +35,14 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
     project_dir = os.path.abspath(os.path.dirname(__file__))
     command = build_scrapy_command(spider_name)
 
+    app.logger.info(f"project_dir: {project_dir}")
+
     try:
         # コマンドを実行
         app.logger.info(f"Spider executed: {command}")
 
         process = subprocess.run(
-            command, cwd=project_dir, capture_output=True, text=True, encoding=ENCODING
+            command, cwd=project_dir, shell=True, capture_output=True, text=True, encoding=ENCODING
         )
         # 結果処理
         app.logger.info(f"Spider result: {process.returncode}")
