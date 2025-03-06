@@ -50,13 +50,13 @@ def index():
     """ホーム画面表示"""
     try:
         products = Products.query.all()
+        # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
+        #       スペースを詰めて重複削除が必要。その後、モデル名を選択するときにさらなる工夫が必要・・・
+        product_names_list = sorted(set([product.name for product in products]))
     except Exception as e:
         from main import app
         app.logger.info(f"DBからのデータ取得エラー: {e}")
-        products = None
-    # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
-    #       スペースを詰めて重複削除が必要。その後、モデル名を選択するときにさらなる工夫が必要・・・
-    product_names_list = sorted(set([product.name for product in products]))
+        product_names_list = []
     return render_template("api.html", product_names_list=product_names_list)
 
 
