@@ -79,8 +79,10 @@ def price_trends() -> Response:
 
     price_data = fetch_price_trends(order_code)
 
+    product = fetch_product_by_order_code(order_code)
+    url = product.url
 
-    return jsonify({"prices": price_data})
+    return jsonify({"prices": price_data, "url": url})
 
 
 @bp.route("/get_notification_setting", methods=["POST"])

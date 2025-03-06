@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // チャートの描画
+  const productLink = document.getElementById("productLink")
   const productSelectionForm = document.getElementById("productSelectionForm");
   const priceTrendCanvas = document.getElementById("priceTrendChart");
 
@@ -85,6 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 options: {
                 responsive: true,
                 plugins: {
+                    title: { display: true, text: `${name} - ${model}`},
                     legend: { display: true, position: "top" },
                     tooltip: { enabled: true },
                 },
@@ -97,6 +100,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 },
                 },
             });
+
+            productLink.innerHTML = `<p><a href=${data.url}>＞リンク</a><p>`
+
             } else {
             trendOutputDiv.innerHTML = "<p>価格推移のデータがありません。</p>";
             }

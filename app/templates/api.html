@@ -14,7 +14,7 @@ DELL ノートパソコン価格チェック
 
 <!-- 過去の価格推移を表示するセクション -->
 <div class="container">
-  <h2>グラフ</h2>
+  <h2>価格推移</h2>
 
   <form id="productSelectionForm">
     <div>
@@ -38,7 +38,7 @@ DELL ノートパソコン価格チェック
 
     <button type="submit">更新</button>
   </form>
-
+  <div id="productLink"></div>
   <canvas id="priceTrendChart" width="400" height="200"></canvas>
 </div>
 
@@ -64,5 +64,5 @@ DELL ノートパソコン価格チェック
 <!-- Date Adapter for Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <!-- 外部JavaScriptファイルを読み込む -->
-<script type="module" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/api.js') }}"></script>
 {% endblock %}

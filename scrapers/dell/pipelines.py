@@ -6,7 +6,7 @@ from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from model import models
+from scrapers.model import models
 from notification.line_notifier import LineNotifier
 
 # 定数

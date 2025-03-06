@@ -10,7 +10,6 @@ class Products(db.Model):
     model = db.Column(db.String)
     url = db.Column(db.String)
     price = db.Column(db.Integer)
-    discount = db.Column(db.Integer)
     scraped_at = db.Column(db.DateTime)
     is_line_notification = db.Column(db.Boolean)
 
