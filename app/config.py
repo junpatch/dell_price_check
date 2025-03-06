@@ -26,7 +26,8 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     """本番環境用設定"""
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://user:password@localhost:5432/production')  # PostgreSQL例
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
+                                             f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop.db')}") # PostgreSQL例
     API_RATE_LIMIT = os.environ.get('API_RATE_LIMIT', '100/hour')
 
 # 環境ごとに呼び分けるためのマッピング

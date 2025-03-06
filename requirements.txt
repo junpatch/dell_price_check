@@ -32,3 +32,4 @@ flask-debugtoolbar~=0.16.0
 apscheduler~=3.10.4
 pytz~=2024.1
 flask-sqlalchemy~=3.1.1
+gunicorn

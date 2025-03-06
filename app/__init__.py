@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 
 from app.model.models import db
 from app.routes import main_routes, api_routes
@@ -11,7 +11,7 @@ def create_app(config_name='default'):
     # 設定を読み込み
     app.config.from_object(config[config_name])
 
-    toolbar = DebugToolbarExtension(app)
+    # toolbar = DebugToolbarExtension(app)
 
     db.init_app(app)
 
