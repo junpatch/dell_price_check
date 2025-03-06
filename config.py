@@ -13,7 +13,7 @@ class DevelopmentConfig(Config):
     """開発環境用設定"""
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
-                                             f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop.db')}")
+                                             f"sqlite:///{os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance', 'dell_laptop.db')}")
     ENV = 'development'
 
 class TestingConfig(Config):

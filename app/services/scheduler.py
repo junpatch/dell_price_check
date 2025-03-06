@@ -29,6 +29,6 @@ def create_scheduler(app):
 
     # Flaskアプリが停止する際にスケジューラーもシャットダウン
     if not scheduler.running:
-        scheduler.start()
+        # scheduler.start()
         app.logger.info("スケジューラーが開始されました。")
     return scheduler
