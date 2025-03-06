@@ -20,7 +20,7 @@ class TestingConfig(Config):
     """テスト環境用設定"""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL',
-                                             f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}")
+                                             f"sqlite:///{os.path.join(os.path.dirname(os.getcwd()), 'instance', 'dell_laptop_test.db')}")
     API_RATE_LIMIT = '1000/hour'  # テストでは制限緩和
     ENV = 'testing'
 
