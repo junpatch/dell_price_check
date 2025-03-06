@@ -53,7 +53,7 @@ def index():
         # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
         #       スペースを詰めて重複削除が必要。その後、モデル名を選択するときにさらなる工夫が必要・・・
         product_names_list = sorted(set([product.name for product in products]))
-    except OperationalError as e:
+    except Exception as e:
         from main import app
         app.logger.info(f"DBからのデータ取得エラー: {e}")
         product_names_list = []
