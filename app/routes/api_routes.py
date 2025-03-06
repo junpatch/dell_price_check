@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, request, render_template, Response
 
 from app.model.models import Products, PriceHistory, db
 from app.services.price_checker import check_price
-from main import app
+
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -51,6 +51,7 @@ def index():
     try:
         products = Products.query.all()
     except ProgrammingError as e:
+        from main import app
         app.logger.info(f"DBからのデータ取得エラー: {e}")
         products = None
     # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
