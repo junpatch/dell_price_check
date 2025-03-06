@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from datetime import datetime
+from sqlite3 import ProgrammingError
 
 from flask import Blueprint, jsonify, request, render_template, Response
 
 from app.model.models import Products, PriceHistory, db
 from app.services.price_checker import check_price
+from main import app
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -46,7 +48,11 @@ def fetch_model_by_name(name: str, ) -> str | None:
 @bp.route("/")
 def index():
     """ホーム画面表示"""
-    products = Products.query.all()
+    try:
+        products = Products.query.all()
+    except ProgrammingError as e:
+        app.logger.info(f"DBからのデータ取得エラー: {e}")
+        products = None
     # TODO: DELL HP上で表記揺らぎあり「inspiron 14ノートパソコン」と「inspiron14ノートパソコン」など。
     #       スペースを詰めて重複削除が必要。その後、モデル名を選択するときにさらなる工夫が必要・・・
     product_names_list = sorted(set([product.name for product in products]))
