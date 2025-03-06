@@ -6,19 +6,21 @@ from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from main import app
 from scrapers.model import models
 from notification.line_notifier import LineNotifier
 
 # 定数
 # DATABASE_URL = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}"
-DATABASE_URL = f"sqlite:///{os.path.join(os.path.dirname(os.getcwd()), 'instance', 'dell_laptop.db')}"
+# DATABASE_URL = f"sqlite:///{os.path.join(os.path.dirname(os.getcwd()), 'instance', 'dell_laptop.db')}"
+DATABASE_URL = "postgresql://postgres:Ji0101Rh@localhost:5432/dell_laptop"
 DEFAULT_PRICE = 0  # 既存価格がない場合のデフォルト値
 
 
 class SQLAlchemyPipeline:
     def open_spider(self, spider) -> None:
         """データベース接続を初期化し、テーブルを作成する。"""
-        self.engine = create_engine(DATABASE_URL)
+        self.engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
         models.Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()

@@ -95,6 +95,9 @@ FEED_EXPORT_ENCODING = "utf-8"
 import chromedriver_autoinstaller
 import os
 
+# Chromium のパスを環境変数から取得
+CHROME_PATH = "/usr/bin/chromium"
+
 SELENIUM_DRIVER_NAME = 'chrome'
 SELENIUM_DRIVER_EXECUTABLE_PATH = chromedriver_autoinstaller.install()
 SELENIUM_DRIVER_ARGUMENTS=['-headless']  # '--headless' if using chrome instead of firefox
