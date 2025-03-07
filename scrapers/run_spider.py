@@ -42,7 +42,7 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
         app.logger.info(f"Spider executed: {command}")
 
         process = subprocess.run(
-            command, cwd=project_dir, shell=True, capture_output=True, text=True, encoding=ENCODING
+            command, cwd=project_dir, shell=True, capture_output=False, text=True, encoding=ENCODING
         )
         # 結果処理
         app.logger.info(f"Spider result: {process.returncode}")
