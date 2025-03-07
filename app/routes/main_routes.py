@@ -9,6 +9,7 @@ bp = Blueprint("main", __name__)
 def index():
     return render_template("index.html")
 
+# 消す
 @bp.route("/test")
 def test():
     os.getcwd()

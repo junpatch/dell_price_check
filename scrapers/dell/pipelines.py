@@ -1,61 +1,65 @@
-import logging
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+# import logging
+# import smtplib
+# from email.mime.text import MIMEText
+# from email.mime.multipart import MIMEMultipart
+# import os
+#
+# class GmailLogHandler(logging.Handler):
+#     def __init__(self, sender_email, sender_password, recipient_email):
+#         super().__init__()
+#         self.sender_email = sender_email
+#         self.sender_password = sender_password
+#         self.recipient_email = recipient_email
+#
+#     def emit(self, record):
+#         if record.levelno >= logging.INFO:  # ERROR以上のログのみ送信
+#             subject = f"Scrapy エラーログ: {record.levelname}"
+#             message = self.format(record)
+#
+#             # メール作成
+#             msg = MIMEMultipart()
+#             msg["From"] = self.sender_email
+#             msg["To"] = self.recipient_email
+#             msg["Subject"] = subject
+#             msg.attach(MIMEText(message, "plain"))
+#
+#             try:
+#                 # Gmail の SMTP サーバーに接続して送信
+#                 server = smtplib.SMTP("smtp.gmail.com", 587)
+#                 server.starttls()  # TLS を有効化
+#                 server.login(self.sender_email, self.sender_password)
+#                 server.sendmail(self.sender_email, self.recipient_email, msg.as_string())
+#                 server.quit()
+#             except Exception as e:
+#                 print(f"メール送信に失敗: {e}")
+#
+# # Gmail アカウント情報
+# SENDER_EMAIL = "junya.ishimoto@gmail.com"
+# SENDER_PASSWORD = "weaz tcfj rhyt domc"  # アプリパスワードを使用
+# RECIPIENT_EMAIL = "junya.ishimoto@gmail.com"
+#
+# # ログハンドラーを追加
+# gmail_handler = GmailLogHandler(SENDER_EMAIL, SENDER_PASSWORD, RECIPIENT_EMAIL)
+# gmail_handler.setLevel(logging.INFO)  # ERROR以上のログのみ送信
+#
+# # ScrapyのロガーにGmailハンドラーを追加
+# logging.getLogger("test").addHandler(gmail_handler)
+# logger = logging.getLogger("test")
+# logger.info(f"cwd: {os.getcwd()}, __file__: {os.path.abspath(os.path.dirname(__file__))}")
+
+
 import os
-
-class GmailLogHandler(logging.Handler):
-    def __init__(self, sender_email, sender_password, recipient_email):
-        super().__init__()
-        self.sender_email = sender_email
-        self.sender_password = sender_password
-        self.recipient_email = recipient_email
-
-    def emit(self, record):
-        if record.levelno >= logging.INFO:  # ERROR以上のログのみ送信
-            subject = f"Scrapy エラーログ: {record.levelname}"
-            message = self.format(record)
-
-            # メール作成
-            msg = MIMEMultipart()
-            msg["From"] = self.sender_email
-            msg["To"] = self.recipient_email
-            msg["Subject"] = subject
-            msg.attach(MIMEText(message, "plain"))
-
-            try:
-                # Gmail の SMTP サーバーに接続して送信
-                server = smtplib.SMTP("smtp.gmail.com", 587)
-                server.starttls()  # TLS を有効化
-                server.login(self.sender_email, self.sender_password)
-                server.sendmail(self.sender_email, self.recipient_email, msg.as_string())
-                server.quit()
-            except Exception as e:
-                print(f"メール送信に失敗: {e}")
-
-# Gmail アカウント情報
-SENDER_EMAIL = "junya.ishimoto@gmail.com"
-SENDER_PASSWORD = "weaz tcfj rhyt domc"  # アプリパスワードを使用
-RECIPIENT_EMAIL = "junya.ishimoto@gmail.com"
-
-# ログハンドラーを追加
-gmail_handler = GmailLogHandler(SENDER_EMAIL, SENDER_PASSWORD, RECIPIENT_EMAIL)
-gmail_handler.setLevel(logging.INFO)  # ERROR以上のログのみ送信
-
-# ScrapyのロガーにGmailハンドラーを追加
-logging.getLogger("test").addHandler(gmail_handler)
-logger = logging.getLogger("test")
-logger.info(f"cwd: {os.getcwd()}, __file__: {os.path.abspath(os.path.dirname(__file__))}")
-
-
-import os
+import sys
 from datetime import datetime
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytz
 from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+# from main import app
 from scrapers.model import models
 from scrapers.notification.line_notifier import LineNotifier
 
