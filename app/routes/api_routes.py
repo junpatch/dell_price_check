@@ -111,7 +111,7 @@ def update_notification_setting() -> Response:
     is_checked = data.get("is_checked")
     product = fetch_product_by_order_code(order_code)
     if product:
-        product.is_line_notification = is_checked
+        product.is_line_notification = 1 if is_checked else 0
         db.session.commit()
         return jsonify({"message": NOTIFICATION_UPDATED_MSG.format(order_code)}), 200
     return jsonify({"error": PRODUCT_NOT_FOUND_MSG.format(order_code)}), 404
