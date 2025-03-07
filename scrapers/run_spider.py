@@ -31,7 +31,7 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
 
     :param spider_name: 実行するスパイダーの名前（デフォルトは 'laptop'）。
     """
-    # 作業ディレクトリを取得
+    # 作業ディレクトリを取得（scrapersを指定）
     project_dir = os.path.abspath(os.path.dirname(__file__))
     command = build_scrapy_command(spider_name)
 

@@ -60,8 +60,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # from main import app
-from scrapers.model import models
-from scrapers.notification.line_notifier import LineNotifier
+try:
+    from scrapers.model import models
+    from scrapers.notification.line_notifier import LineNotifier
+except ImportError as e:
+    from scrapers.model import models
+    from scrapers.notification.line_notifier import LineNotifier
 
 # 定数
 # DATABASE_URL = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}"
