@@ -12,4 +12,4 @@ def index():
 @bp.route("/test")
 def test():
     os.getcwd()
-    return os.getcwd()
+    return f"cwd: {os.getcwd()}, file: {os.path.dirname(__file__)}"
