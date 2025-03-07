@@ -45,6 +45,9 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
             command, cwd=project_dir, shell=True
         )
         # 結果処理
+        process.wait()  # プロセスが終了するまで待つ
+        # process_status["status"] = "Completed"  # 終了後、ステータスを更新
+
         app.logger.info(f"Spider result: {process.returncode}")
         return handle_process_output(process)
     except Exception as e:
