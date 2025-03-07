@@ -18,7 +18,7 @@ class LaptopSpider(scrapy.Spider):
     def start_requests(self):
         yield SeleniumRequest(
             url=self.BASE_URL,
-            wait_time=5,
+            wait_time=50,
             wait_until=EC.element_to_be_clickable(
                 (By.XPATH, '//article[@class="variant-stack ps-stack"]/section[@class="ps-show-hide"]/div/h3/a')),
             screenshot=False,
