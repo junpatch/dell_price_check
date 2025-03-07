@@ -64,8 +64,8 @@ try:
     from scrapers.model import models
     from scrapers.notification.line_notifier import LineNotifier
 except (ImportError, ModuleNotFoundError) as e:
-    from scrapers.model import models
-    from scrapers.notification.line_notifier import LineNotifier
+    from model import models
+    from notification.line_notifier import LineNotifier
 
 # 定数
 # DATABASE_URL = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}"
