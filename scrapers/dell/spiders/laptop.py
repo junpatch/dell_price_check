@@ -67,6 +67,10 @@ class LaptopSpider(scrapy.Spider):
         return items
 
     def _navigate_to_next_page(self, driver, page_index):
+        WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@id='mypagination-current-page']"))
+        )
         try:
             page_input_bar = driver.find_element(By.XPATH, "//input[@id='mypagination-current-page']")
             page_input_bar.send_keys(Keys.BACKSPACE)
@@ -79,6 +83,10 @@ class LaptopSpider(scrapy.Spider):
 
     def _get_total_pages(self, driver):
         """ページ総数を取得"""
+        WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//span[@class="dds__pagination__page-range-total"]'))
+        )
         try:
             return int(driver.find_element(By.XPATH, '//span[@class="dds__pagination__page-range-total"]'
                                            ).get_attribute('textContent'))
