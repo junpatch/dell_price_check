@@ -1,19 +1,14 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from scrapy_selenium import SeleniumRequest
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from scrapy.selector import Selector
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
 from ..items import LaptopItem
 from time import sleep
-from urllib.parse import unquote
-from twisted.internet import reactor
-from twisted.internet.task import deferLater
+
 
 
 class LaptopSpider(scrapy.Spider):
