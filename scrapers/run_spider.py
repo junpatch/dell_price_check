@@ -41,7 +41,7 @@ def execute_spider(spider_name=DEFAULT_SPIDER):
         # コマンドを実行
         app.logger.info(f"Spider executed: {command}")
 
-        process = subprocess.run(
+        process = subprocess.Popen(
             command, cwd=project_dir, shell=True, capture_output=False, text=True, encoding=ENCODING
         )
         # 結果処理
