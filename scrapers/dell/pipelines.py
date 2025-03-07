@@ -113,6 +113,7 @@ class SQLAlchemyPipeline:
         """
         product = self._create_product(item, current_time)
         self.session.merge(product)
+        self.session.commit()
 
         price_history = self._create_price_history(item, current_time)
         self.session.add(price_history)
