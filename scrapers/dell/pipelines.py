@@ -56,9 +56,8 @@ from scrapy.exceptions import DropItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from main import app
-from scrapers.model import models
-from notification.line_notifier import LineNotifier
+from ...scrapers.model import models
+from ...notification.line_notifier import LineNotifier
 
 # 定数
 # DATABASE_URL = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'dell_laptop_test.db')}"
